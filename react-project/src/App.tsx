@@ -11,11 +11,15 @@ function App() {
   const handleSelectItem = (item: string) => {
     console.log(item);
   };
+  const [alertVisibilty, setAlertVisibility] = useState(false);
 
   return (
     <div>
-      <Button color="primary" onClick={() => console.log("Clicked")}>
-        الهم صلي سيدنا محمد
+      {alertVisibilty && (
+        <Alert onClose={() => setAlertVisibility(false)}>5ALY BALAK!</Alert>
+      )}
+      <Button color="primary" onClick={() => setAlertVisibility(true)}>
+        Dooos
       </Button>
     </div>
   );
