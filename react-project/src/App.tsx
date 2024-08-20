@@ -1,16 +1,11 @@
 import { useState } from "react";
-import ListGroup from "./components/ListGroup";
 import "./App.css";
 import "./Message";
-import Message from "./Message";
 import Alert from "./components/Alert";
 import Button from "./components/Button";
+import { PiMosqueDuotone } from "react-icons/pi";
 
 function App() {
-  let items = ["Giza", "Cairo", "Assiut", "Fayoum"];
-  const handleSelectItem = (item: string) => {
-    console.log(item);
-  };
   const [alertVisibilty, setAlertVisibility] = useState(false);
 
   return (
@@ -19,8 +14,9 @@ function App() {
         <Alert onClose={() => setAlertVisibility(false)}>5ALY BALAK!</Alert>
       )}
       <Button color="primary" onClick={() => setAlertVisibility(true)}>
-        Dooos
+        Prayer Time
       </Button>
+      <PiMosqueDuotone size="50" />
     </div>
   );
 }
