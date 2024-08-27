@@ -7,14 +7,24 @@ interface User {
   name: string;
   username: string;
 }
+
 function App() {
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState("");
   const [isloading, setLoading] = useState(false);
+  const deleteUser = (user: User) => {
+    const originalUsers = [...users];
+    setUsers(users.filter((u) => u.id !== user.id));
+    axios
+      .delete("https://jsonplaceholder.typicode.com/users/" + user.id)
+      .catch((err) => {
+        setError(err.message);
+        setUsers(originalUsers);
+      });
+  };
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
-
     axios
       .get<User[]>("https://jsonplaceholder.typicode.com/users", {
         signal: controller.signal,
@@ -36,12 +46,19 @@ function App() {
     <div>
       {error && <p className="text-danger">{error}</p>}
       {isloading && <div className="spinner-border"></div>}
-      <ul>
+      <ul className="list-group">
         {users.map((user) => (
-          <li className="mb-2" key={user.id}>
-            id: {user.id} <br />
-            name: {user.name} <br />
-            username: {user.username} <br />
+          <li
+            className="mb-2 list-group-item d-flex justify-content-between"
+            key={user.id}
+          >
+            {user.name}
+            <button
+              className="btn btn-outline-danger"
+              onClick={() => deleteUser(user)}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
