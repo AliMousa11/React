@@ -1,42 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
-import ExpenseList from "./ExpenseTracker/components/ExpenseList";
-import ExpenseFilter from "./ExpenseTracker/components/ExpenseFilter";
-import ExpenseForm from "./ExpenseTracker/components/ExpenseForm";
+import axios from "axios";
 
+interface User {
+  id: number;
+  name: string;
+  username: string;
+}
 function App() {
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [expenses, setExpenses] = useState([
-    { id: 1, description: "aaa", amount: 10, category: "Utilities" },
-    { id: 2, description: "bbb", amount: 10, category: "Utilities" },
-    { id: 3, description: "ccc", amount: 10, category: "Utilities" },
-    { id: 4, description: "ddd", amount: 10, category: "Utilities" },
-  ]);
-
-  const visibleExpenses = selectedCategory
-    ? expenses.filter((e) => e.category === selectedCategory)
-    : expenses;
-
+  const [users, setUsers] = useState<User[]>([]);
+  useEffect(() => {
+    axios
+      .get<User[]>("https://jsonplaceholder.typicode.com/users")
+      .then((res) => setUsers(res.data));
+  });
   return (
     <div>
-      <div className="mb-5">
-        <ExpenseForm
-          onSubmit={(expense) =>
-            setExpenses([...expenses, { ...expense, id: expenses.length + 1 }])
-          }
-        />
-      </div>
-      <div className="mb-3">
-        <ExpenseFilter
-          onSelectCategory={(category) => setSelectedCategory(category)}
-        />
-      </div>
-      <ExpenseList
-        expenses={visibleExpenses}
-        onDelete={(id) =>
-          setExpenses(expenses.filter((expense) => expense.id !== id))
-        }
-      />
+      <ul>
+        {users.map((user) => (
+          <li className="mb-2" key={user.id}>
+            id: {user.id} <br />
+            name: {user.name} <br />
+            username: {user.username} <br />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
